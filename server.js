@@ -4,7 +4,7 @@ const express = require("express");
 const favicon = require("serve-favicon");
 const bodyParser = require("body-parser");
 const session = require("express-session");
-// const csrf = require('csurf');
+const csrf = require('csurf');
 const consolidate = require("consolidate"); // Templating library adapter for Express
 const swig = require("swig");
 const helmet = require("helmet");
@@ -107,6 +107,15 @@ MongoClient.connect(db, (err, db) => {
         */
 
     }));
+
+    app.use(csrf());
+
+    app.use( function(req,res,next) {
+           res.locals.csrftoken = req.csrfToken();
+           next();
+        }
+    );
+
 
     /*
     // Fix for A8 - CSRF
