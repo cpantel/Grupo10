@@ -69,9 +69,21 @@ const index = (app, db) => {
     app.post("/memos", isLoggedIn, memosHandler.addMemos);
 
     // Handle redirect for learning resources link
-    app.get("/learn", isLoggedIn, (req, res) => {
-        // Insecure way to handle redirects by taking redirect url from query string
-        return res.redirect(req.query.url);
+    app.get("/learn/:target", isLoggedIn, (req, res) => {
+        var redirects = [
+          "https://www.khanacademy.org/economics-finance-domain/core-finance/investment-vehicles-tutorial/ira-401ks/v/traditional-iras",
+          "https://www.yahoo.com"
+        ];
+         const {
+             target
+        } = req.params;
+
+        if ( target >= 0 && target < redirects.length ) {
+           return res.redirect(redirects[target]);
+        } else {
+           throw "ops, url no definida";
+        }
+        
     });
 
     // Handle redirect for learning resources link
